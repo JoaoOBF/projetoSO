@@ -8,10 +8,11 @@ public class Plane {
     String status;
     Date datetime;
 
-    public Plane(String name, String status){
+    public Plane(String name, String status, Date date){
 
         this.name = name;
         this.status = status;
+        this.datetime = date;
 
     }
 
