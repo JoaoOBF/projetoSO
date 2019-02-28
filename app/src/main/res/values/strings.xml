@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">projeto.so</string>
+    <string name="number_of_planes_to_take_off">Número de Aviões no solo</string>
+    <string name="number_of_planes_to_landing">Número de Aviões no ar</string>
+    <string name="init">Iniciar</string>
+
 </resources>
