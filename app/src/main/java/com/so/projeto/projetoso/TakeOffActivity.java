@@ -3,6 +3,8 @@ package com.so.projeto.projetoso;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,6 +18,12 @@ public class TakeOffActivity extends AppCompatActivity {
     ArrayList<Plane> pousosArray;
     ArrayList<Plane> decolagensArray;
     Boolean pistaOcupada = false;
+    TextView txt_nome_pouso;
+    TextView txt_id_pouso;
+    ProgressBar progressBarDecolar;
+    ProgressBar progressBarPouso;
+    TextView txt_id_decolar;
+    TextView txt_nome_decolar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +32,12 @@ public class TakeOffActivity extends AppCompatActivity {
         management = new Management();
         decolagemTime = management.decolagemTime;
         pousoTime = management.pousoTime;
+        txt_nome_pouso = (TextView) findViewById(R.id.txt_nome_pouso);
+        progressBarDecolar = (ProgressBar) findViewById(R.id.progressBar2);
+        txt_nome_decolar = (TextView) findViewById(R.id.txt_nome_decola);
+        progressBarPouso = (ProgressBar) findViewById(R.id.progressBar1);
+        txt_id_decolar = (TextView) findViewById(R.id.txt_id_decolar);
+        txt_id_pouso = (TextView) findViewById(R.id.txt_id_pouso);
 
         criarDecolarAviao();
         criarPousarAviao();
