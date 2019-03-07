@@ -1,5 +1,6 @@
 package com.so.projeto.projetoso;
 
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,12 +10,17 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.function.LongToIntFunction;
 
 public class TakeOffActivity extends AppCompatActivity {
 
     Management management;
     long decolagemTime;
     long pousoTime;
+    long ocupadaTime;
+    int qtdPousos = 0;
+    int qtdDecolagens = 0;
+    boolean hasTakenOff;
     ArrayList<Plane> pousosArray;
     ArrayList<Plane> decolagensArray;
     Boolean pistaOcupada = false;
@@ -26,6 +32,9 @@ public class TakeOffActivity extends AppCompatActivity {
     TextView txt_nome_decolar;
     int numberOfPlanesToTakeOff;
     int numberOfPlanesToLand;
+    CountDownTimer Count;
+    Runnable mPendingRunnable;
+    final Handler processaPistaHandler = new Handler();
 
 
     @Override
@@ -39,41 +48,89 @@ public class TakeOffActivity extends AppCompatActivity {
         progressBarDecolar = (ProgressBar) findViewById(R.id.progressBar2);
         txt_nome_decolar = (TextView) findViewById(R.id.txt_nome_decola);
         progressBarPouso = (ProgressBar) findViewById(R.id.progressBar1);
-        txt_id_decolar = (TextView) findViewById(R.id.txt_id_decolar);
-        txt_id_pouso = (TextView) findViewById(R.id.txt_id_pouso);
         numberOfPlanesToTakeOff = getIntent().getIntExtra("decola", 0);
         numberOfPlanesToLand = getIntent().getIntExtra("pousar", 0);
+        txt_id_decolar = (TextView) findViewById(R.id.txt_id_decolar);
+        txt_id_decolar.setText(String.valueOf(numberOfPlanesToTakeOff));
+        txt_id_pouso = (TextView) findViewById(R.id.txt_id_pouso);
+        txt_id_pouso.setText(String.valueOf(numberOfPlanesToLand));
+        hasTakenOff = true;
         criarDecolarAviao();
         criarPousarAviao();
-        processaPista();
+
+        mPendingRunnable = new Runnable() {
+            @Override
+            public void run() {
+                if (!pistaOcupada) {
+
+                    if (pousosArray.isEmpty() && decolagensArray.isEmpty()){
+                        processaPistaHandler.removeCallbacks(mPendingRunnable);
+                    }
+
+                    if (pousosArray.get(0) != null && !hasTakenOff) {
+                        pistaOcupada = true;
+                        ocupadaTime = pousoTime;
+                        pousosArray.remove(0);
+                        processaPista();
+
+                    }
+                    if (decolagensArray.get(0) != null && hasTakenOff) {
+                        pistaOcupada = true;
+                        ocupadaTime = decolagemTime;
+                        decolagensArray.remove(0);
+                        processaPista();
+
+                    }
+
+                }
+                processaPistaHandler.postDelayed(this, 1000);
+            }
+        };
+
+        mPendingRunnable.run();
 
     }
 
 
     void processaPista() {
-        final Handler processaPistaHandler = new Handler();
-        processaPistaHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                //Do something after 100ms
-                if (!pistaOcupada) {
 
-                    if (pousosArray.get(0) != null) {
-                        pousosArray.remove(0);
-                        pistaOcupada = true;
-//                startTimer[pousoTime];
-                    }
-                    if (decolagensArray.get(0) != null) {
-                        decolagensArray.remove(0);
-                        pistaOcupada = true;
-//                startTimer[decolagemTime];
-                    }
+        // Countdown
+
+        Count  = new CountDownTimer(ocupadaTime, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+
+                Integer intMillis = (int) (long) millisUntilFinished;
+                Integer intOcupada = (int) (long) ocupadaTime;
+
+                if (hasTakenOff)
+                {
+                    progressBarDecolar.setProgress((intOcupada - intMillis)*100 / intOcupada);
+                } else{
+                    progressBarPouso.setProgress((intOcupada - intMillis)*100 / intOcupada);
                 }
-                processaPistaHandler.postDelayed(this, 2000);
             }
-        }, 1500);
+
+            public void onFinish() {
+                pistaOcupada = false;
+
+                if (hasTakenOff && !pousosArray.isEmpty()){
+                    hasTakenOff = false;
+                    txt_id_pouso.setText(String.valueOf(pousosArray.size()));
+                } else if(!hasTakenOff && !decolagensArray.isEmpty()) {
+                    hasTakenOff = true;
+                    txt_id_decolar.setText(String.valueOf(decolagensArray.size()));
+                }
+
+                progressBarPouso.setProgress(0);
+                progressBarDecolar.setProgress(0);
+            }
+
+        }.start();
 
     }
+
+
 
     void criarDecolarAviao() {
         decolagensArray = management.decolagensArray;
@@ -86,7 +143,7 @@ public class TakeOffActivity extends AppCompatActivity {
     void criarPousarAviao() {
         pousosArray = management.pousosArray;
         for (int i = 0; i < numberOfPlanesToLand; i++) {
-            pousosArray.add(new Plane("Avião" + i, "D"));
+            pousosArray.add(new Plane("Avião" + i, "P"));
         }
 
     }

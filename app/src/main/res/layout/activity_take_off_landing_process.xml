@@ -45,7 +45,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="Nome do avião - Companhia Aérea"
+                    android:text="QTD de Aviões para pouso"
                     android:textColor="#000" />
             </RelativeLayout>
         </LinearLayout>
@@ -83,7 +83,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="Nome do avião - Companhia Aérea"
+                    android:text="QTD de Aviões para decolagem"
                     android:textColor="#000" />
             </RelativeLayout>
 
