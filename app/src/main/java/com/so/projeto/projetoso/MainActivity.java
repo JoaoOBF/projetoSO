@@ -34,9 +34,11 @@ public class MainActivity extends AppCompatActivity {
                 if (valueDecola <= 6 && valuePousar <= 3) {
 
                     Intent i = new Intent(getApplicationContext(), TakeOffActivity.class);
-                    i.putExtra("decola",valueDecola );
-                    i.putExtra("pousar",valuePousar );
+                    i.putExtra("decola", valueDecola);
+                    i.putExtra("pousar", valuePousar);
                     startActivity(i);
+                } else {
+                        //Colocar dialog informando o erro
                 }
 
             }

@@ -24,6 +24,9 @@ public class TakeOffActivity extends AppCompatActivity {
     ProgressBar progressBarPouso;
     TextView txt_id_decolar;
     TextView txt_nome_decolar;
+    int numberOfPlanesToTakeOff;
+    int numberOfPlanesToLand;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +41,8 @@ public class TakeOffActivity extends AppCompatActivity {
         progressBarPouso = (ProgressBar) findViewById(R.id.progressBar1);
         txt_id_decolar = (TextView) findViewById(R.id.txt_id_decolar);
         txt_id_pouso = (TextView) findViewById(R.id.txt_id_pouso);
-
+        numberOfPlanesToTakeOff = getIntent().getIntExtra("decola", 0);
+        numberOfPlanesToLand = getIntent().getIntExtra("pousar", 0);
         criarDecolarAviao();
         criarPousarAviao();
         processaPista();
@@ -47,8 +51,8 @@ public class TakeOffActivity extends AppCompatActivity {
 
 
     void processaPista() {
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        final Handler processaPistaHandler = new Handler();
+        processaPistaHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 //Do something after 100ms
@@ -65,7 +69,7 @@ public class TakeOffActivity extends AppCompatActivity {
 //                startTimer[decolagemTime];
                     }
                 }
-                handler.postDelayed(this, 2000);
+                processaPistaHandler.postDelayed(this, 2000);
             }
         }, 1500);
 
@@ -73,28 +77,16 @@ public class TakeOffActivity extends AppCompatActivity {
 
     void criarDecolarAviao() {
         decolagensArray = management.decolagensArray;
-        for (int i = 0; i < 6; i++) {
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR_OF_DAY, 17 + i);
-            cal.set(Calendar.MINUTE, 30);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-            Date d = cal.getTime();
-            decolagensArray.add(new Plane("Avião" + i, "D", d));
+        for (int i = 0; i < numberOfPlanesToTakeOff; i++) {
+            decolagensArray.add(new Plane("Avião" + i, "D"));
         }
 
     }
 
     void criarPousarAviao() {
         pousosArray = management.pousosArray;
-        for (int i = 0; i < 3; i++) {
-            Calendar cal = Calendar.getInstance();
-            cal.set(Calendar.HOUR_OF_DAY, 17 + i);
-            cal.set(Calendar.MINUTE, 30);
-            cal.set(Calendar.SECOND, 0);
-            cal.set(Calendar.MILLISECOND, 0);
-            Date d = cal.getTime();
-            pousosArray.add(new Plane("Avião" + i, "D", d));
+        for (int i = 0; i < numberOfPlanesToLand; i++) {
+            pousosArray.add(new Plane("Avião" + i, "D"));
         }
 
     }

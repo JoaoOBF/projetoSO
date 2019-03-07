@@ -6,19 +6,14 @@ public class Plane {
 
     String name;
     String status;
-    Date datetime;
 
-    public Plane(String name, String status, Date date){
+    public Plane(String name, String status) {
 
         this.name = name;
         this.status = status;
-        this.datetime = date;
 
     }
 
-    public void setDatetime(Date datetime) {
-        this.datetime = datetime;
-    }
 
     public void setName(String name) {
         this.name = name;
@@ -26,10 +21,6 @@ public class Plane {
 
     public void setStatus(String status) {
         this.status = status;
-    }
-
-    public Date getDatetime() {
-        return datetime;
     }
 
     public String getName() {
