@@ -55,9 +55,15 @@ public class TakeOffActivity extends AppCompatActivity {
         txt_id_decolar.setText(String.valueOf(numberOfPlanesToTakeOff));
         txt_id_pouso = (TextView) findViewById(R.id.txt_id_pouso);
         txt_id_pouso.setText(String.valueOf(numberOfPlanesToLand));
-        hasTakenOff = true;
+
         criarDecolarAviao();
         criarPousarAviao();
+
+        if (decolagensArray.isEmpty()){
+            hasTakenOff = false;
+        } else{
+            hasTakenOff = true;
+        }
 
         mPendingRunnable = new Runnable() {
             @Override
@@ -67,8 +73,8 @@ public class TakeOffActivity extends AppCompatActivity {
                     if (pousosArray.isEmpty() && decolagensArray.isEmpty()) {
                         Log.i("finalizado", "");
                         processaPistaHandler.removeCallbacks(mPendingRunnable);
-                        txt_id_pouso.setText("0");
-                        txt_id_decolar.setText("0");
+                        txt_id_pouso.setText("0 - FINALIZOU");
+                        txt_id_decolar.setText("0 - FINALIZOU");
 
                     } else {
                         Log.i("naofinalizado", hasTakenOff + "decolagem->" + String.valueOf(decolagensArray.size()) + "pouso->" + String.valueOf(pousosArray.size()));
